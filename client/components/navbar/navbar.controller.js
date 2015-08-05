@@ -3,7 +3,7 @@
 angular.module('webcdnMediatorApp')
   .controller('NavbarCtrl', function ($scope, $location) {
     $scope.menu = [{
-      'title': 'Home',
+      'title': 'statistics',
       'link': '/'
     }];
 
