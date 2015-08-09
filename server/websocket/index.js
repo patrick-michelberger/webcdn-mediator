@@ -14,7 +14,12 @@ var http = require('http');
 
 var Host = require('../api/host/host.model');
 
-var Server = function() {
+var Server = function(settings) {
+    if (!settings.httpServer) {
+        console.log("httpServer property is missing");
+        return;
+    }
+    this.httpServer = settings.httpServer;
     this.sockets = {};
     this.init();
 };
@@ -22,15 +27,9 @@ var Server = function() {
 Server.prototype.init = function() {
 	var self = this;
 
-    // HTTP SERVER
-    var server = http.createServer(function(request, response) {});
-    server.listen(1337, function() {
-        console.log((new Date()) + " server is listening on port " + 1337);
-    });
-
     // WEBSOCKET SERVER
     var wsServer = new WebSocketServer({
-        httpServer: server
+        httpServer: this.httpServer
     });
 
     // EVENTS

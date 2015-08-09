@@ -25,7 +25,9 @@ var socketio = require('socket.io')(server, {
   serveClient: (config.env === 'production') ? false : true,
   path: '/socket.io-client'
 });
-var ws = new WebsocketServer();
+var ws = new WebsocketServer({
+	httpServer: server
+});
 require('./config/socketio')(socketio);
 require('./config/express')(app);
 require('./routes')(app);
