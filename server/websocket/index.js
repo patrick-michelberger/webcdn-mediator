@@ -25,7 +25,7 @@ var Server = function(settings) {
 };
 
 Server.prototype.init = function() {
-	var self = this;
+    var self = this;
 
     // WEBSOCKET SERVER
     var wsServer = new WebSocketServer({
@@ -46,23 +46,33 @@ Server.prototype.init = function() {
                 connection.peerid = peer_id;
                 self.sockets[peer_id] = connection;
 
-            }
-
-            connection.on('message', function(message) {
-                if (message && message.utf8Data) {
-                    var msg = JSON.parse(message.utf8Data);
-                    var type = msg.type;
-                    var data = msg.data;
-                    switch (type) {
-                        case "host:add":
-                            addHost(data);
-                            break;
-                        case "host:remove":
-                            removeHost(data.uuid);
-                            break;
+                connection.on('message', function(message) {
+                    if (message && message.utf8Data) {
+                        var msg = JSON.parse(message.utf8Data);
+                        var type = msg.type;
+                        var data = msg.data;
+                        console.log("type: ", type);
+                        switch (type) {
+                            case "host:add":
+                                addHost(data);
+                                break;
+                            case "host:remove":
+                                removeHost(data.uuid);
+                                break;
+                            case "resource_timing":
+                                saveStatistic(type, data);
+                                break;
+                            case "pc_connect_duration":
+                                saveStatistic(type, data);
+                                break;
+                            case "lookup_duration":
+                                saveStatistic(type, data);
+                                break;
+                        }
                     }
-                }
-            });
+                });
+
+            }
 
             connection.on('close', function(reasonCode, description) {
                 // close user connection
@@ -70,7 +80,7 @@ Server.prototype.init = function() {
                 var connectionDeleted = false;
                 for (var key in self.sockets) {
                     if (self.sockets[key] === connection) {
-                    	removeHost(self.sockets[key].peerid);
+                        removeHost(self.sockets[key].peerid);
                         delete self.sockets[key];
                         connectionDeleted = true;
                     }
@@ -110,6 +120,46 @@ var addHost = function(data) {
             console.log("err: ", err);
         }
         console.log("Host created: " + data.uuid);
+    });
+};
+
+var saveResourceTiming = function(uuid, data) {
+    Host.findOne({
+        uuid: uuid
+    }, function(err, host) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!host) {
+            return res.send(404);
+        }
+        host.resources.push(data);
+        host.save(function(err) {
+            if (err) {
+                return handleError(res, err);
+            }
+            console.log("Resource timing data " + data.name + " saved for " + uuid);
+        });
+    });
+};
+
+var saveStatistic = function(type, data) {
+    Host.findOne({
+        uuid: data.uuid
+    }, function(err, host) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!host) {
+            return;
+        }
+        host[type].push(data);
+        host.save(function(err) {
+            if (err) {
+                return handleError(res, err);
+            }
+            //console.log("Timing data saved for " + data.uuid);
+        });
     });
 };
 

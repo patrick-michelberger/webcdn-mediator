@@ -11,6 +11,10 @@
                     <br/> <code style="font-size:10px;">loadEventEnd-responseEnd</code></th>
                 <th>Navigation + Page Load
                     <br/><code style="font-size:10px;">loadEventEnd-navigationStart</code></th>
+                <th>Resource 1 <code style="font-size:10px;">duration</code></th>
+                <th>Resource 2 <code style="font-size:10px;">duration</code></th>
+                <th>Resource 3 <code style="font-size:10px;">duration</code></th>
+                {{host.resources}}
             </tr>
         </thead>
         <tbody>
@@ -20,6 +24,36 @@
                 <td>{{host.performance.timing.responseEnd - host.performance.timing.fetchStart}} ms</td>
                 <td>{{host.performance.timing.loadEventEnd - host.performance.timing.responseEnd}} ms</td>
                 <td>{{host.performance.timing.loadEventEnd - host.performance.timing.navigationStart}} ms</td>
+                <td>
+                    <span ng-show="host.resource_timing[0]">
+                        {{host.resource_timing[0].duration | number : 2}} ms
+                        <code style="font-size:10px;">{{host.resource_timing[0].initiatorType}}</code>
+                    </span>
+                    <span ng-show="host.pc_connect_duration.length">
+                        {{host.pc_connect_duration[0].duration | number : 2}} [ms]
+                        <code style="font-size:10px;">DataChannel</code>
+                    </span>
+                </td>
+                <td>
+                    <span ng-show="host.resource_timing[1]">
+                        {{host.resource_timing[1].duration | number : 2}} ms 
+                        <code style="font-size:10px;">{{host.resource_timing[1].initiatorType}}</code>
+                    </span>
+                    <span ng-show="host.pc_connect_duration.length">
+                        {{host.pc_connect_duration[1].duration | number : 2}} [ms]
+                        <code style="font-size:10px;">DataChannel</code>
+                    </span>
+                </td>
+                <td>
+                    <span ng-show="host.resource_timing[2]">
+                        {{host.resource_timing[2].duration | number : 2}} ms 
+                        <code style="font-size:10px;">{{host.resource_timing[2].initiatorType}}</code>
+                    </span>
+                    <span ng-show="host.pc_connect_duration.length">
+                        {{host.pc_connect_duration[2].duration | number : 2}} [ms]
+                        <code style="font-size:10px;">DataChannel</code>
+                    </span>
+                </td>
             </tr>
         </tbody>
     </table>
