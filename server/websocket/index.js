@@ -51,7 +51,6 @@ Server.prototype.init = function() {
                         var msg = JSON.parse(message.utf8Data);
                         var type = msg.type;
                         var data = msg.data;
-                        console.log("type: ", type);
                         switch (type) {
                             case "host:add":
                                 addHost(data);
@@ -66,6 +65,9 @@ Server.prototype.init = function() {
                                 saveStatistic(type, data);
                                 break;
                             case "lookup_duration":
+                                saveStatistic(type, data);
+                                break;
+                            case "fetch_duration": 
                                 saveStatistic(type, data);
                                 break;
                         }
@@ -123,26 +125,6 @@ var addHost = function(data) {
     });
 };
 
-var saveResourceTiming = function(uuid, data) {
-    Host.findOne({
-        uuid: uuid
-    }, function(err, host) {
-        if (err) {
-            return handleError(res, err);
-        }
-        if (!host) {
-            return res.send(404);
-        }
-        host.resources.push(data);
-        host.save(function(err) {
-            if (err) {
-                return handleError(res, err);
-            }
-            console.log("Resource timing data " + data.name + " saved for " + uuid);
-        });
-    });
-};
-
 var saveStatistic = function(type, data) {
     Host.findOne({
         uuid: data.uuid
@@ -158,7 +140,7 @@ var saveStatistic = function(type, data) {
             if (err) {
                 return handleError(res, err);
             }
-            //console.log("Timing data saved for " + data.uuid);
+            console.log("Timing data saved for " + data.uuid);
         });
     });
 };
