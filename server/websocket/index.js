@@ -85,7 +85,7 @@ Server.prototype.init = function() {
                 var connectionDeleted = false;
                 for (var key in self.sockets) {
                     if (self.sockets[key] === connection) {
-                        removeHost(self.sockets[key].peerid);
+                        //removeHost(self.sockets[key].peerid);
                         delete self.sockets[key];
                         connectionDeleted = true;
                     }
