@@ -70,6 +70,9 @@ Server.prototype.init = function() {
                             case "fetch_duration": 
                                 saveStatistic(type, data);
                                 break;
+                            case "sendImage_duration":
+                                saveStatistic(type, data);
+                                break;
                         }
                     }
                 });

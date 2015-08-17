@@ -9,8 +9,8 @@
                     <br/><code style="font-size:10px;">responseEnd-fetchStart</code></th>
                 <th>Page load
                     <br/> <code style="font-size:10px;">loadEventEnd-responseEnd</code></th>
-                <th>Navigation + Page Load
-                    <br/><code style="font-size:10px;">loadEventEnd-navigationStart</code></th>
+                <!--<th>Navigation + Page Load
+                    <br/><code style="font-size:10px;">loadEventEnd-navigationStart</code></th>-->
                 <th>Resource 1</th>
                 <th>Resource 2</th>
                 <th>Resource 3</th>
@@ -23,66 +23,114 @@
                 <td><code>{{host.uuid}}</code></td>
                 <td>{{host.performance.timing.responseEnd - host.performance.timing.fetchStart}} ms</td>
                 <td>{{host.performance.timing.loadEventEnd - host.performance.timing.responseEnd}} ms</td>
-                <td>{{host.performance.timing.loadEventEnd - host.performance.timing.navigationStart}} ms</td>
+                <!--<td>{{host.performance.timing.loadEventEnd - host.performance.timing.navigationStart}} ms</td>-->
                 <td>
-                    <span ng-show="host.resource_timing[0]">
-                        {{host.resource_timing[0].duration | number : 2}} ms
-                        <code style="font-size:10px;">{{host.resource_timing[0].initiatorType}}</code>
-                    </span>
-                    <table class="table" ng-show="host.pc_connect_duration.length">
-                        <thead>
-                            <tr>
-                                <th>P2P</th>
-                                <th>Fetch</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{host.pc_connect_duration[0].duration | number : 2}}</td>
-                                <td>{{host.fetch_duration[0].duration | number : 2}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div ng-show="host.resource_timing[0]">
+                        <h5>XHR</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="badge">{{host.resource_timing[0].duration | number : 2}}</span> <code>load</code>
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-show="host.pc_connect_duration.length">
+                        <h5>P2P</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="badge">{{host.lookup_duration[0].duration | number: 2}}</span> <code>lookup</code>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge">{{host.pc_connect_duration[0].duration | number: 2}}</span> <code>connect</code>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge">{{host.fetch_duration[0].duration | number: 2}}</span> <code>fetch</code>
+                            </li>
+                            <hr/>
+                            <li class="list-group-item">
+                                <span class="badge">{{host.lookup_duration[0].duration + host.pc_connect_duration[0].duration + host.fetch_duration[0].duration | number: 2}}</span> <b>total</b>
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-show="host.sendImage_duration[0]">
+                        <h5>_sendImage()</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="badge">{{host.sendImage_duration[0].duration | number : 2}}</span> <code>sendImage</code>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
                 <td>
-                    <span ng-show="host.resource_timing[1]">
-                        {{host.resource_timing[1].duration | number : 2}} ms 
-                        <code style="font-size:10px;">{{host.resource_timing[1].initiatorType}}</code>
-                    </span>
-                    <table class="table" ng-show="host.pc_connect_duration.length">
-                        <thead>
-                            <tr>
-                                <th>P2P</th>
-                                <th>Fetch</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{host.pc_connect_duration[1].duration | number : 2}}</td>
-                                <td>{{host.fetch_duration[1].duration | number : 2}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div ng-show="host.resource_timing[1]">
+                        <h5>XHR</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="badge">{{host.resource_timing[1].duration | number : 2}}</span> <code>load</code>
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-show="host.pc_connect_duration.length">
+                        <h5>P2P</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="badge">{{host.lookup_duration[1].duration | number: 2}}</span> <code>lookup</code>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge">{{host.pc_connect_duration[1].duration | number: 2}}</span> <code>connect</code>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge">{{host.fetch_duration[1].duration | number: 2}}</span> <code>fetch</code>
+                            </li>
+                            <hr/>
+                            <li class="list-group-item">
+                                <span class="badge">{{host.lookup_duration[1].duration + host.pc_connect_duration[1].duration + host.fetch_duration[1].duration | number: 2}}</span> <b>total</b>
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-show="host.sendImage_duration[2]">
+                        <h5>_sendImage()</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="badge">{{host.sendImage_duration[2].duration | number : 2}}</span> <code>sendImage</code>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
                 <td>
-                    <span ng-show="host.resource_timing[2]">
-                        {{host.resource_timing[2].duration | number : 2}} ms 
-                        <code style="font-size:10px;">{{host.resource_timing[2].initiatorType}}</code>
-                    </span>
-                    <table class="table" ng-show="host.pc_connect_duration.length">
-                        <thead>
-                            <tr>
-                                <th>P2P</th>
-                                <th>Fetch</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{host.pc_connect_duration[2].duration | number : 2}}</td>
-                                <td>{{host.fetch_duration[2].duration | number : 2}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div ng-show="host.resource_timing[2]">
+                        <h5>XHR</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="badge">{{host.resource_timing[2].duration | number : 2}}</span> <code>load</code>
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-show="host.pc_connect_duration.length">
+                        <h5>P2P</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="badge">{{host.lookup_duration[2].duration | number: 2}}</span> <code>lookup</code>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge">{{host.pc_connect_duration[2].duration | number: 2}}</span> <code>connect</code>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge">{{host.fetch_duration[2].duration | number: 2}}</span> <code>fetch</code>
+                            </li>
+                            <hr/>
+                            <li class="list-group-item">
+                                <span class="badge">{{host.lookup_duration[2].duration + host.pc_connect_duration[2].duration + host.fetch_duration[2].duration | number: 2}}</span> <b>total</b>
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-show="host.sendImage_duration[2]">
+                        <h5>_sendImage()</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="badge">{{host.sendImage_duration[2].duration | number : 2}}</span> <code>sendImage</code>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
             </tr>
         </tbody>

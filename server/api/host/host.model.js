@@ -13,7 +13,8 @@ var HostSchema = new Schema({
   "resource_timing": [],
   "pc_connect_duration": [],
   "lookup_duration": [],
-  "fetch_duration": []
+  "fetch_duration": [],
+  "sendImage_duration": []
 });
 
 module.exports = mongoose.model('Host', HostSchema);
