@@ -3,7 +3,7 @@
     <table id="webcdn-peers" class="table table-bordered">
         <thead>
             <tr>
-                <th>#</th>
+                <th></th>
                 <th>Peer ID</th>
                 <th>Networks Latency
                     <br/><code style="font-size:10px;">responseEnd-fetchStart</code></th>
@@ -19,7 +19,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="host in hosts">
-                <th scope="row">{{$index}}</th>
+                <th scope="row"><button ng-click="deleteHost(host.uuid)"class="btn btn-danger">X</button></th>
                 <td><code>{{host.uuid}}</code></td>
                 <td>{{host.performance.timing.responseEnd - host.performance.timing.fetchStart}} ms</td>
                 <td>{{host.performance.timing.loadEventEnd - host.performance.timing.responseEnd}} ms</td>

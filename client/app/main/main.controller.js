@@ -13,4 +13,10 @@ angular.module('webcdnMediatorApp')
     $scope.$on('$destroy', function () {
       socket.unsyncUpdates('host');
     });
+
+    $scope.deleteHost = function(uuid) {
+      console.log("delete host: ", uuid);
+      $http.delete("/api/hosts/" + uuid);
+    };
+
   });
