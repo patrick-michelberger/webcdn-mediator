@@ -20,7 +20,7 @@
         <tbody>
             <tr ng-repeat="host in hosts">
                 <th scope="row"><button ng-click="deleteHost(host.uuid)"class="btn btn-danger">X</button></th>
-                <td><code>{{host.uuid}}</code></td>
+                <td><code>{{host.uuid}}</code><p><span class="label label-default">Created: {{host.created | date:'medium'}} </span></p></td>
                 <td>{{host.performance.timing.responseEnd - host.performance.timing.fetchStart}} ms</td>
                 <td>{{host.performance.timing.loadEventEnd - host.performance.timing.responseEnd}} ms</td>
                 <!--<td>{{host.performance.timing.loadEventEnd - host.performance.timing.navigationStart}} ms</td>-->
