@@ -16,6 +16,9 @@ module.exports = function(app) {
     });
 
     // Insert routes below
+    app.use('/api/resources', require('./api/resource'));
+    app.use('/api/timings', require('./api/timing'));
+    app.use('/y', require('./api/timing'));
     app.use('/api/hosts', require('./api/host'));
     app.use('/api/things', require('./api/thing'));
 
