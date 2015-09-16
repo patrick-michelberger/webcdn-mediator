@@ -11,6 +11,7 @@ var HostSchema = new Schema({
     },
     "performance": {},
     "resource_timing": [],
+    "ws_connect_duration": [],
     "pc_connect_duration": [],
     "lookup_duration": [],
     "fetch_duration": [],
