@@ -13,6 +13,8 @@ var http = require('http');
  */
 
 var Host = require('../api/host/host.model');
+var Resource = require('../api/resource/resource.model');
+var Timing = require('../api/timing/timing.model');
 
 var Server = function(settings) {
     if (!settings.httpServer) {
@@ -67,11 +69,17 @@ Server.prototype.init = function() {
                             case "lookup_duration":
                                 saveStatistic(type, data);
                                 break;
-                            case "fetch_duration": 
+                            case "cdn_fallback_duration":
+                                saveStatistic(type, data);
+                                break;
+                            case "fetch_duration":
                                 saveStatistic(type, data);
                                 break;
                             case "sendImage_duration":
                                 saveStatistic(type, data);
+                                break;
+                            case "plain:timing":
+                                saveTiming(type, data);
                                 break;
                         }
                     }
@@ -128,24 +136,52 @@ var addHost = function(data) {
     });
 };
 
-var saveStatistic = function(type, data) {
-    Host.findOne({
-        uuid: data.uuid
-    }, function(err, host) {
+var saveTiming = function(type, data) {
+    Timing.create({
+        "page_load": data.page_load,
+        "data": data
+    }, function(err, timing) {
         if (err) {
             return handleError(res, err);
         }
-        if (!host) {
-            return;
-        }
-        host[type].push(data);
-        host.save(function(err) {
-            if (err) {
-                return handleError(res, err);
-            }
-            console.log("Timing data saved for " + data.uuid);
-        });
     });
+};
+
+var saveStatistic = function(type, data) {
+    Resource.findOne({
+        hash: data.hash,
+        uuid: data.uuid,
+    }, function(err, resource) {
+        if (err) {
+            return handleError(err);
+        }
+        if (!resource) {
+            var resource = {};
+            resource.hash = data.hash;
+            resource.uuid = data.uuid;
+            resource[type] = data.duration;
+            console.log("data: ", data["ws_connect_duration"]);
+            if (data && data["ws_connect_duration"]) {
+                resource["ws_connect_duration"] = data["ws_connect_duration"];
+            }
+            console.log("resource to save: ", resource);
+            Resource.create(resource, function(err) {
+                console.log("Resource created!");
+            });
+        } else {
+            resource[type] = data.duration;
+            resource.save(function(err) {
+                if (err) {
+                    return handleError(res, err);
+                }
+                console.log("Timing data saved for resource" + data.hash);
+            });
+        }
+    });
+};
+
+function handleError(err) {
+    console.log("error: ", err);
 };
 
 /**
