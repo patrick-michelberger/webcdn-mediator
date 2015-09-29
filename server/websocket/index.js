@@ -52,34 +52,13 @@ Server.prototype.init = function() {
                     if (message && message.utf8Data) {
                         var msg = JSON.parse(message.utf8Data);
                         var type = msg.type;
-                        var data = msg.data;
+                        var data = JSON.parse(msg.data);
                         switch (type) {
-                            case "host:add":
-                                addHost(data);
-                                break;
-                            case "host:remove":
-                                removeHost(data.uuid);
-                                break;
-                            case "resource_timing":
-                                saveStatistic(type, data);
-                                break;
-                            case "pc_connect_duration":
-                                saveStatistic(type, data);
-                                break;
-                            case "lookup_duration":
-                                saveStatistic(type, data);
-                                break;
                             case "cdn_fallback_duration":
                                 saveStatistic(type, data);
                                 break;
                             case "fetch_duration":
                                 saveStatistic(type, data);
-                                break;
-                            case "sendImage_duration":
-                                saveStatistic(type, data);
-                                break;
-                            case "plain:timing":
-                                saveTiming(type, data);
                                 break;
                         }
                     }
@@ -148,24 +127,17 @@ var saveTiming = function(type, data) {
 };
 
 var saveStatistic = function(type, data) {
+    console.log("save resource: ", data);
     Resource.findOne({
         hash: data.hash,
-        uuid: data.uuid,
+        seeder: data.seeder,
+        leecher: data.leecher
     }, function(err, resource) {
         if (err) {
             return handleError(err);
         }
         if (!resource) {
-            var resource = {};
-            resource.hash = data.hash;
-            resource.uuid = data.uuid;
-            resource[type] = data.duration;
-            console.log("data: ", data["ws_connect_duration"]);
-            if (data && data["ws_connect_duration"]) {
-                resource["ws_connect_duration"] = data["ws_connect_duration"];
-            }
-            console.log("resource to save: ", resource);
-            Resource.create(resource, function(err) {
+            Resource.create(data, function(err) {
                 console.log("Resource created!");
             });
         } else {
